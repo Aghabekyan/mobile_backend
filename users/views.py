@@ -9,12 +9,12 @@ from rest_framework.response import Response
 from rest_framework import status
 
 class UserDetail(viewsets.ViewSet):
-    # authentication_classes = [FirebaseAuthentication]
+    authentication_classes = [FirebaseAuthentication]
 
     def retrieve_all(self, request, format=None):
         queryset = User.objects.all()
         serializer = UserSerializer(queryset, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk=None):
         try:
@@ -63,10 +63,3 @@ class UserDetail(viewsets.ViewSet):
         except User.DoesNotExist:
             return Response('User Does not exist', status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    # authentication_classes = (ExampleAuthentication,)
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
