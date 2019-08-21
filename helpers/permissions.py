@@ -4,12 +4,12 @@ from .exceptions import NotAdminException
 class IsOwner(BasePermission):
     def has_object_permission(self, request, view, obj):
         print('IsOwner Permission checker')
-        return True
+        return False
 
 class IsAdmin(BasePermission):
     def has_permission(self, request, view):
         print('IsAdmin Permission checker')
-        if request.user.role.id == 1:
+        if request.user.is_admin():
             return True
         raise NotAdminException()
 

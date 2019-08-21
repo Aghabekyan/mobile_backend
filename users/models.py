@@ -11,3 +11,6 @@ class User(models.Model):
     uid = models.CharField(max_length=200, unique=True)
     name = models.CharField(max_length=200)
     role = models.ForeignKey(Role, null=True, blank=True, on_delete=models.SET_NULL)
+
+    def is_admin(self):
+        return self.role.id == 1
