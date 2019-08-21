@@ -3,61 +3,25 @@ from rest_framework import viewsets
 from .serializers import UserSerializer
 from middlewares.auth import FirebaseAuthentication
 
-
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import authentication_classes, permission_classes
-from rest_framework.permissions import BasePermission, IsAuthenticated, SAFE_METHODS
-from rest_framework.exceptions import APIException
 
+from helpers.permissions import IsOwner, IsAdmin, IsTest
 
-class NotAdminException(APIException):
-    status_code = status.HTTP_403_FORBIDDEN
-    default_detail = {'error': True, 'message': 'Not Admin'}
-
-
-class IsOwner(BasePermission):
-    def has_object_permission(self, request, view, obj):
-        print('IsOwner Permission checker')
-        # import pdb
-        # pdb.set_trace()
-        return True
-
-
-class IsHasObj(BasePermission):
-    def has_object_permission(self, request, view, obj):
-        print('IsHasObj Permission checker')
-        return False
-
-
-class IsAdmin(BasePermission):
-    def has_permission(self, request, view):
-        print('IsAdmin Permission checker')
-        if request.user.role.id == 1:
-            return True
-        raise NotAdminException()
-
-class IsTest(BasePermission):
-    def has_permission(self, request, view):
-        print('IsTest Permission checker')
-        return True
-        # if request.user.role.id == 1:
-        #     return True
-        # raise NotAdminException()
 
 class UserDetail(viewsets.ViewSet):
     # authentication_classes = ([FirebaseAuthentication])
 
-    # permission_classes_by_action = {'create': [HasPerm1]}
+    # permission_classes_by_action = {'create': [IsAdmin]}
     def get_permissions(self):
         """
         Instantiates and returns the list of permissions that this view requires.
         """
         if self.request.method == 'GET':
-            self.permission_classes = [IsAdmin, IsOwner, IsHasObj]
+            self.permission_classes = [IsAdmin, IsOwner]
         else:
-            self.permission_classes = [IsAdmin, IsOwner, IsHasObj]
+            self.permission_classes = [IsAdmin, IsOwner]
         return super(UserDetail, self).get_permissions()
 
     def get_authenticators(self):
@@ -69,7 +33,7 @@ class UserDetail(viewsets.ViewSet):
     def retrieve_all(self, request, format=None):
         queryset = User.objects.all()
         serializer = UserSerializer(queryset, many=True)
-        # self.check_object_permissions(self.request, queryset)
+        self.check_object_permissions(self.request, queryset)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk=None):
