@@ -1,10 +1,12 @@
 from rest_framework.permissions import BasePermission
-from .exceptions import NotAdminException
+from .exceptions import NotAdminException, NotOwnerException
 
 class IsOwner(BasePermission):
     def has_object_permission(self, request, view, obj):
         print('IsOwner Permission checker')
-        return False
+        if obj.uid == request.user.uid:
+            return True
+        raise NotOwnerException()
 
 class IsAdmin(BasePermission):
     def has_permission(self, request, view):

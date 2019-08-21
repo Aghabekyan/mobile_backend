@@ -31,13 +31,13 @@ class UserDetail(viewsets.ViewSet):
     def retrieve_all(self, request, format=None):
         queryset = User.objects.all()
         serializer = UserSerializer(queryset, many=True)
-        self.check_object_permissions(self.request, queryset)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def retrieve(self, request, pk=None):
         try:
             instance = User.objects.get(pk=pk)
             serializer = UserSerializer(instance)
+            self.check_object_permissions(self.request, instance)
             return Response(serializer.data)
         except User.DoesNotExist:
             return Response('User Does not exist', status=status.HTTP_404_NOT_FOUND)
