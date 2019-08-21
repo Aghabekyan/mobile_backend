@@ -16,6 +16,7 @@ from rest_framework import serializers
 
 class UserSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
+    uid = serializers.CharField(read_only=True)
 
     class Meta:
         model = User
