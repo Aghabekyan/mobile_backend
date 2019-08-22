@@ -11,7 +11,7 @@ before_install:
   # - docker build -t aghabekyan374/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - ls
+  - ls # testing
 
 deploy:
   provider: script
