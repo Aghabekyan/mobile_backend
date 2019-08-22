@@ -4,9 +4,6 @@ from .exceptions import NotAdminException, NotOwnerException
 class IsOwner(BasePermission):
     message = 'User is not Owner'
     def has_object_permission(self, request, view, obj):
-        print('IsOwner Permission checker')
-        print(obj.uid)
-        print(request.user.uid)
         return obj.uid == request.user.uid
         # raise NotAdminException()
 
@@ -17,7 +14,8 @@ class IsAdmin(BasePermission):
         return request.user.is_admin()
 
 class IsOwnerOrAdmin(BasePermission):
-    message = 'Custom Message'
+    message = 'Permission Denied'
 
     def has_object_permission(self, request, view, obj):
+        print('IsOwnerOrAdmin Permission checker')
         return obj.uid == request.user.uid or request.user.is_admin()
