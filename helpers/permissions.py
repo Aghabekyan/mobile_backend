@@ -2,22 +2,22 @@ from rest_framework.permissions import BasePermission
 from .exceptions import NotAdminException, NotOwnerException
 
 class IsOwner(BasePermission):
+    message = 'User is not Owner'
     def has_object_permission(self, request, view, obj):
         print('IsOwner Permission checker')
-        if obj.uid == request.user.uid:
-            return True
-        raise NotOwnerException()
+        print(obj.uid)
+        print(request.user.uid)
+        return obj.uid == request.user.uid
+        # raise NotAdminException()
 
 class IsAdmin(BasePermission):
+    message = 'Not Admin'
     def has_permission(self, request, view):
         print('IsAdmin Permission checker')
-        if request.user.is_admin():
-            return True
-        raise NotAdminException()
+        return request.user.is_admin()
 
-class IsTest(BasePermission):
-    def has_permission(self, request, view):
-        print('IsTest Permission checker')
-        if request.user.role.id == 1:
-            return True
-        raise NotAdminException()
+class IsOwnerOrAdmin(BasePermission):
+    message = 'Custom Message'
+
+    def has_object_permission(self, request, view, obj):
+        return obj.uid == request.user.uid or request.user.is_admin()
