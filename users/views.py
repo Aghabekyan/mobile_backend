@@ -4,8 +4,8 @@ from .serializers import UserSerializer
 from middlewares.auth import FirebaseAuthentication
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import authentication_classes, permission_classes
-from helpers.permissions import IsOwner, IsAdmin, IsOwnerOrAdmin
+from helpers.permissions import IsAdmin, IsOwnerOrAdmin
+
 
 class UserDetail(viewsets.ViewSet):
 
@@ -14,18 +14,24 @@ class UserDetail(viewsets.ViewSet):
         Instantiates and returns the list of permissions that this view requires.
         """
         self.permission_classes = []
-        if self.action == 'retrieve_all': self.permission_classes = [IsAdmin]
-        if self.action == 'retrieve': self.permission_classes = [IsOwnerOrAdmin]
-        if self.action == 'create': self.permission_classes = []
-        if self.action == 'update': self.permission_classes = [IsOwnerOrAdmin]
-        if self.action == 'partial_update': self.permission_classes = [IsOwnerOrAdmin]
-        if self.action == 'destroy': self.permission_classes = [IsOwnerOrAdmin]
+        if self.action == 'retrieve_all':
+            self.permission_classes = [IsAdmin]
+        if self.action == 'retrieve':
+            self.permission_classes = [IsOwnerOrAdmin]
+        if self.action == 'create':
+            self.permission_classes = []
+        if self.action == 'update':
+            self.permission_classes = [IsOwnerOrAdmin]
+        if self.action == 'partial_update':
+            self.permission_classes = [IsOwnerOrAdmin]
+        if self.action == 'destroy':
+            self.permission_classes = [IsOwnerOrAdmin]
         return [permission() for permission in self.permission_classes]
 
     def get_authenticators(self):
         self.authentication_classes = [FirebaseAuthentication]
         return [auth() for auth in self.authentication_classes]
- 
+
     def retrieve_all(self, request, format=None):
         queryset = User.objects.all()
         serializer = UserSerializer(queryset, many=True)

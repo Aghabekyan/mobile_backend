@@ -5,7 +5,7 @@ urlpatterns = [
     path('api/v1/users', views.UserDetail.as_view({'get': 'retrieve_all',
                                                    'post': 'create'})),
     path('api/v1/users/<slug:pk>', views.UserDetail.as_view({'get': 'retrieve',
-                                                            'put': 'update',
-                                                            'patch': 'partial_update',
-                                                            'delete': 'destroy'})),
+                                                             'put': 'update',
+                                                             'patch': 'partial_update',
+                                                             'delete': 'destroy'})),
 ]

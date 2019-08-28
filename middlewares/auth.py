@@ -5,6 +5,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import auth
 
+
 class FirebaseAuthentication(authentication.BaseAuthentication):
 
     def _get_jwt_token(self, request):
@@ -28,26 +29,14 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
             token = self._get_jwt_token(request)
             uid = self._get_uid_from_token(token)
             if request.method != "POST":
-                user = User.objects.get(uid=uid) # get the user
+                user = User.objects.get(uid=uid)  # get the user
             else:
                 user = None
         except User.DoesNotExist:
             raise exceptions.AuthenticationFailed('No such user')
         except ValueError as e:
             raise exceptions.AuthenticationFailed({"error": str(e)})
-        except:
+        else:
             raise exceptions.AuthenticationFailed('Unauthorized')
 
-
-        # if request.method == "POST":
-        #     try:
-        #         user = User.objects.get(uid=uid) # get the user
-        #     except User.DoesNotExist:
-        #         u = User.objects.create(uid=uid, name='sullivan')
-        #         u.save()
-        #     except:
-        #         raise exceptions.AuthenticationFailed('Unauthorized') 
-
-
-
-        return (user, None) # authentication successful
+        return (user, None)  # authentication successful
