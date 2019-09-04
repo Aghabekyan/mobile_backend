@@ -21,22 +21,26 @@ class FirebaseAuthentication(authentication.BaseAuthentication):
         return user
 
     def authenticate(self, request):
-        print("Firebase auth")
-        if (not len(firebase_admin._apps)):
-            cred = credentials.Certificate("./key.json")
-            firebase_admin.initialize_app(cred)
-        try:
-            token = self._get_jwt_token(request)
-            uid = self._get_uid_from_token(token)
-            if request.method != "POST":
-                user = User.objects.get(uid=uid)  # get the user
-            else:
-                user = None
-        except User.DoesNotExist:
-            raise exceptions.AuthenticationFailed('No such user')
-        except ValueError as e:
-            raise exceptions.AuthenticationFailed({"error": str(e)})
-        else:
-            raise exceptions.AuthenticationFailed('Unauthorized')
+        # print("Firebase auth")
+        # if (not len(firebase_admin._apps)):
+        #     cred = credentials.Certificate("./key.json")
+        #     firebase_admin.initialize_app(cred)
+        # try:
+        #     token = self._get_jwt_token(request)
+        #     uid = self._get_uid_from_token(token)
+        #     if request.method != "POST":
+        #         user = User.objects.get(uid=uid)  # get the user
+        #     else:
+        #         user = None
+        # except User.DoesNotExist:
+        #     raise exceptions.AuthenticationFailed('No such user')
+        # except ValueError as e:
+        #     raise exceptions.AuthenticationFailed({"error": str(e)})
+        # # else:
+        # #     raise exceptions.AuthenticationFailed('Unauthorized')
 
-        return (user, None)  # authentication successful
+        # # import pdb
+        # # pdb.set_trace()
+        # return (user, None)  # authentication successful
+
+        return (None, None)  # authentication successful

@@ -4,6 +4,8 @@ from users import views
 urlpatterns = [
     path('api/v1/users', views.UserDetail.as_view({'get': 'retrieve_all',
                                                    'post': 'create'})),
+    path('api/v1/users/reset_password', views.UserDetail.as_view({'post': 'reset_password'})),
+    path('api/v1/users/change_password', views.UserDetail.as_view({'post': 'change_password'})),
     path('api/v1/users/<slug:pk>', views.UserDetail.as_view({'get': 'retrieve',
                                                              'put': 'update',
                                                              'patch': 'partial_update',

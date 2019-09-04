@@ -1,11 +1,13 @@
-from .models import User
+from .models import User, ResetPassword
 from rest_framework import viewsets
 from .serializers import UserSerializer
 from middlewares.auth import FirebaseAuthentication
 from rest_framework.response import Response
 from rest_framework import status
 from helpers.permissions import IsAdmin, IsOwnerOrAdmin
-
+from django.core.mail import send_mail
+from django.conf import settings
+import uuid
 
 class UserDetail(viewsets.ViewSet):
 
@@ -88,3 +90,36 @@ class UserDetail(viewsets.ViewSet):
         except User.DoesNotExist:
             return Response('User Does not exist', status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    def reset_password(self, request):
+        data = request.data
+        token = uuid.uuid4().hex
+
+        user = User.objects.get(pk=data['uid'])
+        ResetPassword.objects.create(uid=user, token = token)
+
+        subject = 'Thank you for registering to our site'
+        message = f"<h1>Please click this link</h1> http://127.0.0.1/api/v1/users/reset_password/confirm?uid={data['uid']}&token={token}"
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = ['s.aghabekyan@yandex.ru',]
+        send_mail( subject=subject, html_message=message, from_email=email_from, recipient_list=recipient_list, message=None )
+        
+        return Response(data, status=status.HTTP_200_OK)
+
+    def change_password(self, request):
+        data = request.data
+
+        user = User.objects.get(pk=data['uid'])
+
+        today_date = datetime.today()
+        actual_date = today_date - timedelta(days=2)
+
+        ResetPassword.objects.filter(uid=user, token=token, created__lte=actual_date)
+
+        if data['new_password_1'] == data['new_password_2']:
+            user = auth.update_user(
+                uid,
+                password=data['new_password_1']
+            )
+
+        return Response(data, status=status.HTTP_200_OK)
