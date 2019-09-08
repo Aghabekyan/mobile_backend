@@ -153,3 +153,5 @@ APPEND_SLASH = False
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+FIREBASE_CERTIFICATE = './key.json'

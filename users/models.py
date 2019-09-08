@@ -12,7 +12,10 @@ class User(models.Model):
     role = models.ForeignKey(Role, null=True, blank=True, on_delete=models.SET_NULL)
 
     def is_admin(self):
-        return self.role.id == 1
+        if self.role is not None:
+            return self.role.id == 1
+        else:
+            return False
 
 
 class ResetPassword(models.Model):
