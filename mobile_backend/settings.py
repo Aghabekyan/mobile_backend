@@ -25,11 +25,20 @@ SECRET_KEY = '11w_m=!2a49skxkoj2uc2#%-o7ac=qjg+xxg10yk#w*kd5ddhj'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    '10.0.3.151',
-    '127.0.0.1'
-]
+ALLOWED_HOSTS = ['*']
 
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    'https://127.0.0.1',
+    'https://localhost',
+    'https://127.0.0.1:4200',
+    'https://localhost:4200',
+    'http://localhost:4200',
+    'http://127.0.0.1:4200',
+    'http://127.0.0.1',
+    'http://localhost'
+)
 
 # Application definition
 
@@ -41,12 +50,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'main',
+    'corsheaders',
     'rest_framework'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -155,3 +166,10 @@ APPEND_SLASH = False
 STATIC_URL = '/static/'
 
 FIREBASE_CERTIFICATE = './key.json'
+
+
+
+JWT_SECRET = 'secret'
+JWT_ALGORITHM = 'HS256'
+JWT_ACCESS_EXP_SECONDS = 3600
+JWT_REFRESH_EXP_SECONDS = 3600*24

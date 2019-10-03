@@ -37,3 +37,6 @@ uritemplate==3.0.0
 urllib3==1.25.3
 flake8==3.5.0
 gunicorn
+pyjwt
+werkzeug
+django-cors-headers

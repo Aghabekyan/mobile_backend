@@ -7,9 +7,24 @@ class Role(models.Model):
 
 
 class User(models.Model):
-    uid = models.CharField(max_length=200, primary_key=True)
-    name = models.CharField(max_length=200)
+    id = models.AutoField(primary_key=True)
+    username = models.CharField(max_length=200)
+    email = models.CharField(max_length=200)
+    password = models.CharField(max_length=500)
     role = models.ForeignKey(Role, null=True, blank=True, on_delete=models.SET_NULL)
+
+
+    # def create(self, values):
+    #     self.username = values.get("username")
+    #     self.email = values.get("email").lower()
+    #     self.password = generate_password_hash(values.get("password"))
+    #
+    #     self.store()
+    #
+    #     # self.send_verification_email()
+    #
+    #     return self
+
 
     def is_admin(self):
         if self.role is not None:
